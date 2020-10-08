@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import { WebView } from "react-native-webview-modal";
 
-function WalletConnectWebView() {
+function WalletConnectWebView({
+  onQRCodeModalClosed,
+}) {
+  const onMessage = useCallback(async ({ nativeEvent: { data } }) => {
+    const { type, ...extras } = JSON.parse(data);
+    if (type === "WCQRModalClosed") {
+      return onQRCodeModalClosed();
+    }
+    return Promise.reject(new Error(`Encountered unexpected type, ${type}.`));
+  }, [onQRCodeModalClosed]);
   return (
     <WebView
       originWhitelist={["*"]}
+      onMessage={onMessage}
       source={{
         baseUrl: '',
         html: `
@@ -20,25 +30,29 @@ function WalletConnectWebView() {
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/browser@1.0.0/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/qrcode-modal@1.2.2/dist/umd/index.min.js"></script>
   <script>
+    var shouldPostMessage = (data) => {
+      return window.ReactNativeWebView.postMessage(JSON.stringify(data));
+    };
     var WalletConnect = window.WalletConnect.default;
-    var WalletConnectQRCodeModal = window.WalletConnectQRCodeModal.default;
-    var walletConnector = new WalletConnect({
-      bridge: "https://bridge.walletconnect.org",
-      qrcodeModal: WalletConnectQRCodeModal,
-    });
-    if (!walletConnector.connected) {
-      // create new session
-      walletConnector.createSession().then(() => {
-        // get uri for QR Code modal
-        var uri = walletConnector.uri;
-        // display QR Code modal
-        WalletConnectQRCodeModal.open(uri, () => {
-          console.log('QR Code Modal closed');
-        });
+    var WalletConnectQRCodeModal = window.WalletConnectQRCodeModal.default; 
+
+    function nextSession() {
+      var walletConnector = new WalletConnect({
+        bridge: "https://bridge.walletconnect.org",
+        qrcodeModal: WalletConnectQRCodeModal,
       });
-    } else {
       walletConnector.killSession();
+      walletConnector
+        .createSession()
+        .then(() => WalletConnectQRCodeModal.open(walletConnector.uri, () => {
+          shouldPostMessage({
+            type: "WCQRModalClosed",
+          });
+          nextSession();
+        }));
     }
+
+    nextSession();
   </script>
 </body>
 </html>
@@ -48,7 +62,10 @@ function WalletConnectWebView() {
   );
 }
 
-WalletConnectWebView.propTypes = {};
+WalletConnectWebView.propTypes = {
+  onQRCodeModalClosed: PropTypes.func.isRequired,
+};
+
 WalletConnectWebView.defaultProps = {};
 
 export default WalletConnectWebView;

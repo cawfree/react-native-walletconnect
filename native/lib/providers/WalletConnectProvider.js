@@ -22,6 +22,10 @@ function WalletConnectProvider({
     setVisible(true);
   }, [setVisible]);
 
+  const onQRCodeModalClosed = useCallback(async () => {
+    setVisible(false);
+  }, [setVisible]);
+
   return (
     <WalletConnectContext.Provider
       value={{
@@ -38,6 +42,7 @@ function WalletConnectProvider({
         pointerEvents={visible ? "auto" : "none"}
       >
         <WalletConnectWebView
+          onQRCodeModalClosed={onQRCodeModalClosed}
         />
       </Animated.View>
     </WalletConnectContext.Provider>
