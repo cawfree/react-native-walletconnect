@@ -1,0 +1,40 @@
+{
+  "scripts": {
+    "build": "yarn ; babel src --out-dir dist ; rm -rf node_modules ;"
+  },
+  "keywords": [
+    "react-native",
+    "walletconnect",
+    "wallet",
+    "web3",
+    "ethereum"
+  ],
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-native": "^0.63.3",
+    "react-native-webview": "^10.9.2"
+  },
+  "dependencies": {
+    "nanoid": "^3.1.12",
+    "react-native-webview-modal": "^0.0.1-alpha.7"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "husky": "^4.3.0",
+    "jest": "^26.5.2",
+    "leasot": "^11.3.0",
+    "prettier": "^2.1.2"
+  },
+  "name": "react-native-walletconnect",
+  "version": "0.0.1-alpha.0",
+  "description": "⚛️ 👛 WalletConnect for React Native! Zero linking, full awesome. (Android/iOS/Web/Expo)",
+  "main": "dist",
+  "repository": "https://github.com/cawfree/react-native-walletconnect",
+  "author": "Alex Thomas (@cawfree) <alex@getuni.app>",
+  "license": "MIT",
+  "private": false
+}

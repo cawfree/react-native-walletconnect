@@ -7,7 +7,7 @@ import {
   Button,
 } from "react-native";
 
-import WalletConnectProvider, { useWalletConnect } from "./lib";
+import WalletConnectProvider, { useWalletConnect } from "react-native-walletconnect";
 
 const styles = StyleSheet.create({
   container: {

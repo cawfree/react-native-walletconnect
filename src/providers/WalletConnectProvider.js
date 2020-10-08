@@ -5,8 +5,6 @@ import { nanoid } from "nanoid/non-secure";
 import { WalletConnectContext, defaultContext } from "../contexts";
 import { WalletConnectWebView } from "../components";
 
-const { height } = Dimensions.get("screen");
-
 function WalletConnectProvider({
   children,
 }) {
