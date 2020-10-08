@@ -10,6 +10,18 @@ function WalletConnectWebView({
     const { type, ...extras } = JSON.parse(data);
     if (type === "WCQRModalClosed") {
       return onQRCodeModalClosed();
+    } else if (type === "error") {
+      const { error } = extras;
+      return Promise.reject(new Error(error));
+    } else if (type === "WCConnectEvent") {
+      const { payload } = extras;
+      return console.warn('got connect', payload);
+    } else if (type === "WCSessionUpdateEvent") {
+      const { payload } = extras;
+      return console.warn('got update', payload);
+    } else if (type === "WCDisconnectEvent") {
+      const { payload } = extras;
+      return console.warn('got disconnect', payload);
     }
     return Promise.reject(new Error(`Encountered unexpected type, ${type}.`));
   }, [onQRCodeModalClosed]);
@@ -50,13 +62,29 @@ function WalletConnectWebView({
         bridge: "https://bridge.walletconnect.org",
         qrcodeModal: WalletConnectQRCodeModal,
       });
+      walletConnector.on("connect", (error, payload) => {
+        if (error) {
+          return shouldPostMessage({ type: "error", error });
+        }
+        return shouldPostMessage({ type: "WCConnectEvent", payload });
+      });
+      walletConnector.on("session_update", (error, payload) => {
+        if (error) {
+          return shouldPostMessage({ type: "error", error });
+        }
+        return shouldPostMessage({ type: "WCSessionUpdateEvent", payload });
+      });
+      walletConnector.on("disconnect", (error, payload) => {
+        if (error) {
+          return shouldPostMessage({ type: "error", error });
+        }
+        shouldPostMessage({ type: "WCDisconnectEvent", payload });
+      });
       walletConnector.killSession();
       walletConnector
         .createSession()
         .then(() => WalletConnectQRCodeModal.open(walletConnector.uri, () => {
-          shouldPostMessage({
-            type: "WCQRModalClosed",
-          });
+          shouldPostMessage({ type: "WCQRModalClosed" });
           setTimeout(nextSession, 500);
         }));
     }
