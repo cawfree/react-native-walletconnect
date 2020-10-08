@@ -1,5 +1,6 @@
 import React, { useRef, useCallback } from "react";
 import PropTypes from "prop-types";
+import { View } from "react-native";
 import { WebView } from "react-native-webview-modal";
 
 function WalletConnectWebView({
@@ -12,10 +13,18 @@ function WalletConnectWebView({
     }
     return Promise.reject(new Error(`Encountered unexpected type, ${type}.`));
   }, [onQRCodeModalClosed]);
+  const onError = useCallback(async ({}) => {
+    onQRCodeModalClosed();
+  }, [onQRCodeModalClosed]);
+  const renderError = useCallback(() => (
+    <View />
+  ), []);
   return (
     <WebView
       originWhitelist={["*"]}
       onMessage={onMessage}
+      onError={onError}
+      renderError={renderError}
       source={{
         baseUrl: '',
         html: `
@@ -48,7 +57,7 @@ function WalletConnectWebView({
           shouldPostMessage({
             type: "WCQRModalClosed",
           });
-          nextSession();
+          setTimeout(nextSession, 500);
         }));
     }
 
