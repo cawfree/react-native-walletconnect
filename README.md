@@ -5,7 +5,7 @@ If your project supports using [**Native Modules**](), I strongly recommend you 
 
 Compatible with [**Android**](https://engineering.fb.com/developer-tools/react-native-for-android-how-we-built-the-first-cross-platform-react-native-app/), [**iOS**](https://reactnative.dev/), [**Web**](https://github.com/necolas/react-native-web) and [**Expo**](https://expo.io).
 
-## 🔥 Features
+### 🔥 Features
   - Supports the **complete** WalletConnect [**Client Interface**](https://docs.walletconnect.org/client-api).
   - **Persists** connected wallets between executions.
 
@@ -77,7 +77,7 @@ export default function App() {
 
 The [`useWalletConnect`](./src/hooks/useWalletConnect.js) hook provides the following functionality:
   - [`createSession`](https://docs.walletconnect.org/client-api#create-new-session-session_request)
-    - Requests the creation of a new session via the presentation of the [**QR Modal**]().
+    - Requests the creation of a new session via the presentation of the [**QR Modal**](https://www.npmjs.com/package/@walletconnect/qrcode-modal).
   - [`killSession`](https://docs.walletconnect.org/client-api#kill-session-disconnect)
     - Terminates the active session, equivalent to logging out.
   - [`sendTransaction`](https://docs.walletconnect.org/client-api#send-transaction-eth_sendtransaction)
@@ -91,9 +91,9 @@ The [`useWalletConnect`](./src/hooks/useWalletConnect.js) hook provides the foll
   - [`signTypedData`](https://docs.walletconnect.org/client-api#sign-typed-data-eth_signtypeddata)
     - Signs [**Typed Data**](https://github.com/uport-project/eth-typed-data).
   - [`sendCustomRequest`](https://docs.walletconnect.org/client-api#send-custom-request)
-    - Sends a custom request.
+    - Sends a custom request, where you can specify custom configuration options such as `jrpcProvider`.
   - `session`
     - Returns an array of the active session. These are the connected wallets with details such as `address`es and `chain`s they are assigned to.
 
 ## ✌️ License
-[**MIT**](./LICENSE)`
+[**MIT**](./LICENSE)
