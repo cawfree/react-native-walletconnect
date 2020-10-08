@@ -7,7 +7,7 @@ import {
   Button,
 } from "react-native";
 
-import WalletConnectProvider, { Wallet, useWalletConnect } from "./lib";
+import WalletConnectProvider, { useWalletConnect } from "./lib";
 
 const styles = StyleSheet.create({
   container: {
@@ -25,8 +25,6 @@ const WalletConnectExample = () => {
     signTransaction,
   } = useWalletConnect();
   const hasWallet = !!session.length;
-  // TODO: filter returned arguments
-  console.warn({ session });
   return (
     <>
       {!hasWallet && (

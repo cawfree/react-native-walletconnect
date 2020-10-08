@@ -12,6 +12,7 @@ function WalletConnectWebView({
   onWalletDisconnected,
   onCallbacksGenerated,
 }) {
+  const [key, setKey] = useState(nanoid);
   const ref = useRef();
   const [roundTrips, setRoundTrips] = useState({});
 
@@ -34,7 +35,6 @@ function WalletConnectWebView({
   const onMessage = useCallback(async ({ nativeEvent: { data } }) => {
     try {
       const { type, ...extras } = JSON.parse(data);
-      console.warn({ type, extras });
       if (type === "WCQRModalClosedEvent") {
         return onQRCodeModalClosed();
       } else if (type === "WCErrorEvent") {
@@ -110,7 +110,8 @@ function WalletConnectWebView({
 
   const killSession = useCallback(async () => {
     await makeRoundTrip("killSession");
-  }, [makeRoundTrip, ref]);
+    setKey(nanoid);
+  }, [makeRoundTrip, ref, setKey]);
 
   useEffect(
     () => {
@@ -153,6 +154,7 @@ function WalletConnectWebView({
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WalletConnect</title>
 </head>
+<!-- react-native-walletconnect (${key})-->
 <body style="margin:0;padding:0;">
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/browser@1.0.0/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/qrcode-modal@1.2.2/dist/umd/index.min.js"></script>
