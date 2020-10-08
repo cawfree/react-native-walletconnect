@@ -5,7 +5,8 @@ const createErrorThunk = () => () => Promise.reject(
 );
 
 export const defaultContext = Object.freeze({
-  connect: createErrorThunk(),
+  createSession: createErrorThunk(),
+  killSession: createErrorThunk(),
   session: [],
   sendTransaction: createErrorThunk(),
   signTransaction: createErrorThunk(),

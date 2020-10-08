@@ -34,6 +34,7 @@ function WalletConnectWebView({
   const onMessage = useCallback(async ({ nativeEvent: { data } }) => {
     try {
       const { type, ...extras } = JSON.parse(data);
+      console.warn({ type, extras });
       if (type === "WCQRModalClosedEvent") {
         return onQRCodeModalClosed();
       } else if (type === "WCErrorEvent") {
@@ -107,6 +108,10 @@ function WalletConnectWebView({
     [makeRoundTrip]
   );
 
+  const killSession = useCallback(async () => {
+    await makeRoundTrip("killSession");
+  }, [makeRoundTrip, ref]);
+
   useEffect(
     () => {
       onCallbacksGenerated({ 
@@ -116,6 +121,7 @@ function WalletConnectWebView({
         signMessage,
         signTypedData,
         sendCustomMessage,
+        killSession,
       });
     },
     [
@@ -126,6 +132,7 @@ function WalletConnectWebView({
       signTypedData,
       sendCustomMessage,
       onCallbacksGenerated,
+      killSession,
     ],
   );
 
@@ -193,30 +200,33 @@ function WalletConnectWebView({
         return shouldPostMessage({ type: "WCErrorEvent", error });
       }
       shouldPostMessage({ type: "WCDisconnectEvent", payload });
+      return nextSession();
     });
 
     function nextSession() {
-      
       Promise.resolve()
-        .then(() => {
-          if (walletConnector.connected) {
-            return walletConnector.killSession();
-          }
-          return undefined;
-        })
+        .then(() => walletConnector.connected && walletConnector.killSession())
         .then(() => walletConnector.createSession())
         .then(() => WalletConnectQRCodeModal.open(walletConnector.uri, () => {
           shouldPostMessage({ type: "WCQRModalClosedEvent" });
           setTimeout(nextSession, 500);
         }))
         .catch(error => {
-          alert(error);
           shouldPostMessage({ type: "WCQRModalClosedEvent" });
           shouldPostMessage({ type: "WCErrorEvent", error });
         });
     }
-    nextSession();
 
+    // Main: If already connected, just refresh the session.
+    //       Warning; although we still have the ability to acknowledge
+    //       the session, we do end up missing wallet provider details.
+    if (walletConnector.connected) {
+      try { walletConnector.updateSession(walletConnector); } catch (e) {
+        nextSession();
+      }
+    } else {
+      nextSession();
+    }
   </script>
 </body>
 </html>

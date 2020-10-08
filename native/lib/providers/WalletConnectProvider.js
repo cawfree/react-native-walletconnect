@@ -26,7 +26,7 @@ function WalletConnectProvider({
     ]).start();
   }, [visible, animOpacity]);
 
-  const connect = useCallback(async () => {
+  const createSession = useCallback(async () => {
     setVisible(true);
   }, [setVisible]);
 
@@ -40,6 +40,7 @@ function WalletConnectProvider({
   }, [setVisible, setSession]);
 
   const onWalletUpdated = useCallback(async (params) => {
+    console.warn('wallet was updated', params);
     setSession(params);
   }, [setVisible, setSession]);
 
@@ -57,7 +58,7 @@ function WalletConnectProvider({
       value={{
         ...defaultContext,
         ...callbacks,
-        connect,
+        createSession,
         session,
       }}
     >
