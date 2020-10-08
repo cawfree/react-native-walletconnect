@@ -5,11 +5,11 @@ If your project supports using [**Native Modules**](), I strongly recommend you 
 
 Compatible with [**Android**](https://engineering.fb.com/developer-tools/react-native-for-android-how-we-built-the-first-cross-platform-react-native-app/), [**iOS**](https://reactnative.dev/), [**Web**](https://github.com/necolas/react-native-web) and [**Expo**](https://expo.io).
 
-## Features
+## 🔥 Features
   - Supports the **complete** WalletConnect [**Client Interface**](https://docs.walletconnect.org/client-api).
   - **Persists** connected wallets between executions.
 
-## Getting Started
+## 🚀 Getting Started
 
 Using [**Yarn**](https://yarnpkg.com):
 
@@ -17,7 +17,7 @@ Using [**Yarn**](https://yarnpkg.com):
 yarn add react-native-webview react-native-walletconnect
 ```
 
-## Usage
+## ✍️ Usage
 
 First you need to wrap the graphical root of your application with the [`<WalletConnectProvider />`](./src/providers/WalletConnectProvider.js). Once this is done, you can make a call to the [`useWalletConnect`](./src/hooks/useWalletConnect.js) [**hook**](https://reactjs.org/docs/hooks-intro.html) to utilize the complete WalletConnect Client API within your app.
 
@@ -95,5 +95,5 @@ The [`useWalletConnect`](./src/hooks/useWalletConnect.js) hook provides the foll
   - `session`
     - Returns an array of the active session. These are the connected wallets with details such as `address`es and `chain`s they are assigned to.
 
-## License
-[**MIT`**](./LICENSE)`
+## ✌️ License
+[**MIT**](./LICENSE)`
