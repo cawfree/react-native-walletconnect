@@ -38,7 +38,6 @@ function WalletConnectProvider({
   }, [setVisible, setSession]);
 
   const onWalletUpdated = useCallback(async (params) => {
-    console.warn('wallet was updated', params);
     setSession(params);
   }, [setVisible, setSession]);
 
