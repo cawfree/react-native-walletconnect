@@ -30,7 +30,7 @@
     "prettier": "^2.1.2"
   },
   "name": "react-native-walletconnect",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.1",
   "description": "⚛️ 👛 WalletConnect for React Native! Zero linking, full awesome. (Android/iOS/Web/Expo)",
   "main": "dist",
   "repository": "https://github.com/cawfree/react-native-walletconnect",
